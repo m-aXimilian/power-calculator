@@ -1,0 +1,72 @@
+#+options: toc:nil date:nil author:t title:t num:t
+#+LATEX_CLASS: article
+#+title: Mean power from energy readings
+#+subtitle: C# prototype implementation
+#+author: Maximilian Küffner
+#+startup: indent
+
+#+macro: api REST-API
+
+* setup                                                            :noexport:
+#+begin_src elisp :results silent
+  (setq org-latex-packages-alist nil)
+  (add-to-list 'org-latex-packages-alist '("margin=2cm" "geometry" t))
+  (add-to-list 'org-latex-packages-alist '("" "siunitx" t))
+#+end_src
+* Prerequisites & assumptions
+- a vzlogger {{{api}}} is available at <url>:<port>
+- different meter registers are available with distinct (known) identifiers
+- the {{{api}}} gives a timestamp and an associated energy reading for a register id
+  
+* Highlevel description
+- the {{{api}}} is called with a set of register identifiers called ``channels''
+- the readings from this are saved to a collection of a (predefined) size
+- if there are at least 2 elements in this collection, a mean power $P_{mean}$ can be calculated like
+  #+begin_export latex
+  \begin{align*}
+    t_{diff}  &= R_1^{t} - R_0^{t} \\
+    e_{diff} &= R_1^{e} - R_0^{e} \\
+    P_{mean} &= \frac{e_{diff}}{t_{diff} \cdot 3.6\cdot10^{6} }
+  \end{align*}
+  #+end_export
+  where
+  - $R_n^{t}$ denotes the timestamp of register $n$ (\si{\milli\second})
+  - $R_n^{e}$ denotes the energy of reading $n$ (\si{\kilo\watt\hour})
+  - $t_{diff}$ is the time difference between two readings (\si{\milli\second})
+  - $e_{diff}$ is the energy differnce between two readings (\si{\kilo\watt})
+
+* Class diagram
+[[file:diagram.svg]]
+
+* Usage
+After building the executable via e.g. ~dotnet build~, the options can be retreived by calling ~./RestAPICS --help~.
+This will give the following output:
+#+begin_src sh
+  Description:
+    A consumer of a vzlogger REST-API packet, that will perform some statistics 
+    based on channels that are identified in the vzloggerOptions config-file.
+    It will deduce a mean power from the meter readings of the specified channels 
+    and compare a current power against it. Upon predefined threshold values, it will
+    signal warnings to any attached listeners.
+
+  Usage:
+    RestAPICS [options]
+
+  Options:
+    --config <config>              Absolute path to the domain logic configuration json-file. It should 
+                                   provide parameters for
+                                       - MovingAverageNumber
+                                       - WaitbetweenApiCall
+                                       - VzLoggerChannelFilter
+                                       - WarnThreshold
+                                       - ErrorThreshold
+    --vzloggerconf <vzloggerconf>  Absolute path to the Vzlogger configuraion json-file. It should 
+                                   provide prameters for
+                                       - ApiUrl
+                                       - A dictionary with some channel IDs (with none specified, the 
+                                   whole application makes no sense)
+    --log <log>                    The absolute path to the log-file that should be used.
+    --version                      Show version information
+    -?, -h, --help                 Show help and usage information
+  
+#+end_src

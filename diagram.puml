@@ -1,0 +1,78 @@
+@startuml
+class Program 
+
+interface IAbstractData{
+    {field}+(ulong, double): DataTuple
+    {field}+string: Uuid
+}
+interface IData{
+    +string: uuid
+    +long: last 
+    +int: interval
+    +string: protocol
+    +double[][]: tuples
+}
+interface IPacket{
+    {field}+Data[]: data
+}
+
+interface IMeterCollection
+interface IMeterEntity{
+    +IMeterCollection[]: MeterReadings
+    +event: NewMeterCollectionAvailable
+}
+
+interface IRestGet
+
+class VzLoggerData{
+    {field}-IPacket: packet
+}
+class VzLoggerPacket
+class Data
+
+class MeanPowerCalculator{
+    -void: CalculateMeanPower()
+}
+class MeterConfiguration
+class MeterConfigurationWrapper
+class MeterEntityController {
+    +Task: CallLoop()
+    -void: OnLastCollectionChanged()
+    -void: HandleNewMeterCollection_DoWork()
+}
+class PowerMeterCollection
+
+class RestApi
+
+note "VzLoggerData is used to unpack the raw-data\nprovided in IData." as N1
+note "The meter reading and the associated\ntimestamp of a read are hidden in the tuples field" as N2
+IRestGet <|-- RestApi
+IAbstractData <|-- VzLoggerData
+IAbstractData ..N1
+IPacket <|-- VzLoggerPacket
+IData <|-- Data
+IData .. N2
+
+VzLoggerData ..> IPacket : <uses>
+VzLoggerPacket "0" *-- "*" Data
+
+note "CalculateMeanPower subscribes\nto the NewMeterCollectionAvailable event" as N3
+note "OnLastCollectionChanged is triggered\nby the MeterReadings setter.\nCallLoop is responsible for setting this." as N4
+IMeterEntity <|-- MeterEntityController
+IMeterEntity o.. IMeterCollection
+IMeterCollection <|-- PowerMeterCollection
+IMeterCollection o.. IAbstractData
+MeterConfigurationWrapper "1" *-- "1" MeterConfiguration
+MeanPowerCalculator ..> IMeterEntity : <uses>
+MeanPowerCalculator .. N3
+MeterEntityController .. N4
+
+MeterEntityController ..> IRestGet
+PowerMeterCollection "0" *-- "*" IAbstractData
+
+Program o.. MeterConfigurationWrapper
+Program o.. RestApi
+Program o.. MeterEntityController
+Program o.. MeanPowerCalculator
+
+@enduml
