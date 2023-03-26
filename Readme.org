@@ -47,3 +47,6 @@ Something like this is the exepted output:
     -?, -h, --help                 Show help and usage information
   
 #+end_src
+
+* UML
+[[file:diagram.svg]]
