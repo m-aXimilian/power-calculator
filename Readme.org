@@ -1,0 +1,49 @@
+#+startup: indent
+#+title: Power Calculator
+#+author: Maximilian Kueffner
+
+* Purpose
+For a power meter that is exposed via [[https://github.com/volkszaehler/vzlogger][vzlogger]], this aims to constantly calculate a (mean) power from subsequent energy readings for a collection of channels (available via a REST-interface).
+
+* Usage
+
+** Build
+With a ~.NET~ availabel on the host, run 
+#+begin_src sh
+  dotnet build
+#+end_src
+to generate the ~PowerCalculator~ executable.
+
+
+** Use
+The command ~./PowerCalculator --help~ will prompt how to use the application.
+Something like this is the exepted output:
+#+begin_src sh
+  Description:
+    A consumer of a vzlogger REST-API packet, that will perform some statistics 
+    based on channels that are identified in the vzloggerOptions config-file.
+    It will deduce a mean power from the meter readings of the specified channels 
+    and compare a current power against it. Upon predefined threshold values, it will
+    signal warnings to any attached listeners.
+
+  Usage:
+    RestAPICS [options]
+
+  Options:
+    --config <config>              Absolute path to the domain logic configuration json-file. It should 
+                                   provide parameters for
+                                       - MovingAverageNumber
+                                       - WaitbetweenApiCall
+                                       - VzLoggerChannelFilter
+                                       - WarnThreshold
+                                       - ErrorThreshold
+    --vzloggerconf <vzloggerconf>  Absolute path to the Vzlogger configuraion json-file. It should 
+                                   provide prameters for
+                                       - ApiUrl
+                                       - A dictionary with some channel IDs (with none specified, the 
+                                   whole application makes no sense)
+    --log <log>                    The absolute path to the log-file that should be used.
+    --version                      Show version information
+    -?, -h, --help                 Show help and usage information
+  
+#+end_src
