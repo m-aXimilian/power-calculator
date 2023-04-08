@@ -9,6 +9,8 @@
     using System.Threading.Tasks;
     using System;
     using System.Collections.Generic;
+    using Power.Calculator.UdpSocket;
+    using System.Net;
 
     public class Program
     {
@@ -60,6 +62,12 @@
                     EnergyDirection.PRODUCTION, channelsProduction);
                 // this is needed because it does the calculation based on events of the productionController
                 MeanPowerCalculator calcProduction = new(productionController);
+                IPEndPoint endPoint = new(
+                    IPAddress.Parse("127.0.0.1"),
+                    8_403);
+
+                var udpServer = new PowerCalculatorSocket(endPoint, productionController);
+                udpServer.StartServer();
                 await productionController.CallLoop((int)float.Parse(domainConfiguration["WaitbetweenApiCall"]) * 1_000);
 
             }

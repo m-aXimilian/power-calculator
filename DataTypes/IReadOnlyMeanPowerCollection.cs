@@ -1,4 +1,4 @@
-namespace Domain.PowerMeter
+namespace DataTypes.Data
 {
     public interface IReadOnlyMeanPowerCollection<T>
     {
