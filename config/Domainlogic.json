@@ -1,6 +1,6 @@
 {
     "MovingAverageNumber": 30.0,
-    "WaitbetweenApiCall" : 2.0,
+    "WaitbetweenApiCall" : 120.0,
     "VzLoggerChannelFilter": "2.8",
     "WarnThreshold": 0.5,
     "ErrorThreshold": 0.8,
