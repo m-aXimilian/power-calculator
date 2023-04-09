@@ -3,7 +3,7 @@ using Serilog;
 
 namespace Domain.PowerMeter
 {
-    class MeanPowerCalculator
+    public class MeanPowerCalculator : IReadOnlyMeanPowerCollection<TimestampedCollection<double>>
     {
         private readonly IMeterEntity meterEntity;
 

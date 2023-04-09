@@ -66,7 +66,7 @@
                     IPAddress.Parse("127.0.0.1"),
                     8_403);
 
-                var udpServer = new PowerCalculatorSocket(endPoint, productionController);
+                var udpServer = new PowerCalculatorSocket(endPoint, productionController, calcProduction);
                 udpServer.StartServer();
                 await productionController.CallLoop((int)float.Parse(domainConfiguration["WaitbetweenApiCall"]) * 1_000);
 

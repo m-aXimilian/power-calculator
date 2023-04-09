@@ -1,3 +1,5 @@
+using DataTypes.Data;
+using Newtonsoft.Json;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -5,23 +7,29 @@ using Domain.PowerMeter;
 
 namespace Power.Calculator.UdpSocket
 {
+    using MeanPowerTimestamped = IReadOnlyMeanPowerCollection<TimestampedCollection<double>>;
     public class PowerCalculatorSocket : IDisposable
     {
         private readonly IPEndPoint endPoint;
         private readonly Socket listenSocket;
         private readonly IMeterEntity meterEntity;
+        private readonly MeanPowerTimestamped calculator;
         private bool disposedValue;
 
-        public PowerCalculatorSocket(IPEndPoint endPoint, IMeterEntity meterEntity)
+        public PowerCalculatorSocket(
+            IPEndPoint endPoint,
+            IMeterEntity meterEntity,
+            MeanPowerTimestamped calculator
+            )
         {
             this.endPoint = endPoint;
             this.meterEntity = meterEntity;
+            this.calculator = calculator;
             this.listenSocket = new(
                 this.endPoint.AddressFamily,
-                SocketType.Stream,
-                ProtocolType.Tcp
+                SocketType.Dgram,
+                ProtocolType.Udp
             );
-
             this.listenSocket.Bind(this.endPoint);
         }
 
@@ -64,7 +72,14 @@ namespace Power.Calculator.UdpSocket
 
         private void StartBroadcast(object sender, EventArgs e)
         {
-            Console.WriteLine($"Broadcasting stuff {nameof(this.meterEntity)}");
+            var tmp = this.MakePacket();
+            string cnslstring = JsonConvert.SerializeObject(tmp);
+            Console.WriteLine(cnslstring);
+        }
+
+        private ServerPacketPowerMeter MakePacket()
+        {
+            return this.calculator.WrapServerPacket();
         }
     }
 }

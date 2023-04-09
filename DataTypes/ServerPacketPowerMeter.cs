@@ -1,6 +1,4 @@
-using DataTypes.Data;
-
-namespace Domain.PowerMeter
+namespace DataTypes.Data
 {
     public class ServerPacketPowerMeter : IReadOnlyMeanPowerCollection<TimestampedCollection<double>>
     {
