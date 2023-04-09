@@ -67,7 +67,7 @@
             var serverAddress = domainConfiguration["ServerAddress"];
             var serverPort = domainConfiguration["ServerPort"];
 
-            using (var api = new RestAPIMock(meter.MeterConfiguration.ApiUrl, meter.MeterConfiguration.Channels))
+            using (var api = new RestAPI(meter.MeterConfiguration.ApiUrl, meter.MeterConfiguration.Channels))
             {
                 MeterEntityController productionController = new(
                     api,
