@@ -35,6 +35,7 @@ namespace Power.Calculator.UdpSocket
 
         public void StartServer()
         {
+            Log.Information($"Server running at {this.endPoint.Address}:{this.endPoint.Port}");
             this.meterEntity.NewMeterCollectionAvailable += this.StartBroadcast;
         }
 
