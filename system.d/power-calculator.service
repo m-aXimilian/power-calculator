@@ -1,0 +1,11 @@
+[Unit]
+Description=powercalculator
+After=syslog.target network.target ntp.service
+
+[Service]
+ExecStart=/usr/local/bin/PowerCalculator --config /home/pi/calculator-config/Domainlogic.json --vzloggerconf /home/pi/calculator-config/Vzlogger.json --log /home/pi/calculator-config/logfile.log --debug
+ExecReload=
+StandardOutput=null
+
+[Install]
+WantedBy=multi-user.target
