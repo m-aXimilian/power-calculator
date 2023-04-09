@@ -10,19 +10,31 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  build:
-
+  build-amd-release:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Publish arm64
-      run: dotnet publish --runtime linux-arm64 --configuration Release --self-contained
+    - run: dotnet restore
+    - run: dotnet build --configuration Release --no-restore
+    - uses: actions/upload-artifact@v3
+      with:
+        name: PowerCalculatorAMD64
+        path: builds
+  build-arm-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - run: dotnet restore
+    - run: dotnet publish --runtime linux-arm64 --configuration Release --self-contained
+    - uses: actions/upload-artifact@v3
+      with:
+        name: PowerCalculatorARM64
+        path: builds
