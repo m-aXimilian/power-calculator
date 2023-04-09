@@ -71,7 +71,7 @@ namespace Domain.PowerMeter
 
         private void HandleNewMeterCollection_DoWork(object sender, EventArgs e)
         {
-            Log.Information($"{nameof(MeterEntityController)}: {sender}[{this.ChannelType}]: new reading set after {this.LastFinishedCollection.Timestamp - this.CreationTime}s with ID {this.LastFinishedCollection.Id}.");
+            Log.Debug($"{nameof(MeterEntityController)}: {sender}[{this.ChannelType}]: new reading set after {this.LastFinishedCollection.Timestamp - this.CreationTime}s with ID {this.LastFinishedCollection.Id}.");
             if (this.MeterReadings.Count < this.maxReadingSize)
             {
                 this.MeterReadings.Add(this.lastFinishedCollection);

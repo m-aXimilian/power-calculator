@@ -27,4 +27,8 @@ signal warnings to any attached listeners.";
     static internal readonly string LogOptionsIdentifier = "--log";
 
     static internal readonly string LogOptionsDescription = "The absolute path to the log-file that should be used.";
+
+    static internal readonly string LoggerLevelDebugFlag = "--debug";
+
+    static internal readonly string LoggerLevelDebugDescription = "When given, the log level is set to debug. This will add debug-level info to the log file.";
 }

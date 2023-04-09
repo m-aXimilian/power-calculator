@@ -22,30 +22,38 @@ Something like this is the exepted output:
   Description:
     A consumer of a vzlogger REST-API packet, that will perform some statistics 
     based on channels that are identified in the vzloggerOptions config-file.
-    It will deduce a mean power from the meter readings of the specified channels 
-    and compare a current power against it. Upon predefined threshold values, it will
+    It will deduce a mean power from the meter readings of the specified 
+    channels 
+    and compare a current power against it. Upon predefined threshold values, 
+    it will
     signal warnings to any attached listeners.
 
   Usage:
-    RestAPICS [options]
+    PowerCalculator [options]
 
   Options:
-    --config <config>              Absolute path to the domain logic configuration json-file. It should 
-                                   provide parameters for
+    --config <config>              Absolute path to the domain logic 
+                                   configuration json-file. It should provide 
+                                   parameters for
                                        - MovingAverageNumber
                                        - WaitbetweenApiCall
                                        - VzLoggerChannelFilter
                                        - WarnThreshold
                                        - ErrorThreshold
-    --vzloggerconf <vzloggerconf>  Absolute path to the Vzlogger configuraion json-file. It should 
-                                   provide prameters for
+    --vzloggerconf <vzloggerconf>  Absolute path to the Vzlogger configuraion 
+                                   json-file. It should provide prameters for
                                        - ApiUrl
-                                       - A dictionary with some channel IDs (with none specified, the 
-                                   whole application makes no sense)
-    --log <log>                    The absolute path to the log-file that should be used.
+                                       - A dictionary with some channel IDs 
+                                   (with none specified, the whole application 
+                                   makes no sense)
+    --log <log>                    The absolute path to the log-file that 
+                                   should be used.
+    --debug                        When given, the log level is set to debug. 
+                                   This will add debug-level info to the log 
+                                   file.
     --version                      Show version information
     -?, -h, --help                 Show help and usage information
-  
+
 #+end_src
 
 * UML

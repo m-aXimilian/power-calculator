@@ -3,7 +3,7 @@ using Serilog;
 
 namespace Domain.PowerMeter
 {
-    class MeanPowerCalculator
+    public class MeanPowerCalculator : IReadOnlyMeanPowerCollection<TimestampedCollection<double>>
     {
         private readonly IMeterEntity meterEntity;
 
@@ -52,7 +52,7 @@ namespace Domain.PowerMeter
             this.CurrentMeanPower = new(currentMean);
             this.AveragePowerTotalTimeDelta = averageTimespan;
 
-            Log.Information($"{nameof(this.CalculateMeanPower)}: Current mean for {this.meterEntity.ChannelType}: " +
+            Log.Debug($"{nameof(this.CalculateMeanPower)}: Current mean for {this.meterEntity.ChannelType}: " +
                             $"{currentMean:0.000}kW in {averageTimespan}s with {nElements} elements of {nEach} each.");
 
             this.OnRefreshPowerDrift();
@@ -70,7 +70,7 @@ namespace Domain.PowerMeter
         private void RefreshPowerDrift_DoWork(object sender, EventArgs e)
         {
             this.CurrentPowerDrift = new((this.RecentLivePower.Data / this.CurrentMeanPower.Data) - 1);
-            Log.Information($"Current drift {this.CurrentPowerDrift.Data * 100:0.000}%");
+            Log.Debug($"Current drift {this.CurrentPowerDrift.Data * 100:0.000}%");
         }
 
         private double TupleCompare(IEnumerable<IAbstractData> firstTuples, IEnumerable<IAbstractData> secondTuples)
