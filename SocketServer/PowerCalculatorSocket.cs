@@ -61,9 +61,9 @@ namespace Power.Calculator.UdpSocket
 
         private void StartBroadcast(object sender, EventArgs e)
         {
-            var tmp = this.MakePacket();
-            string cnslstring = JsonConvert.SerializeObject(tmp);
-            byte[] buffer = Encoding.ASCII.GetBytes(cnslstring);
+            var serverPacket = this.MakePacket();
+            string serverPacketString = JsonConvert.SerializeObject(serverPacket);
+            byte[] buffer = Encoding.ASCII.GetBytes(serverPacketString);
             this.serverSocket.SendTo(buffer, this.endPoint);
             Log.Debug($"UDP packet on {this.endPoint.Address}:{this.endPoint.Port} sent.");
         }
