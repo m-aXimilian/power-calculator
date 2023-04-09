@@ -22,8 +22,8 @@ jobs:
     - run: dotnet build --configuration Release --no-restore
     - uses: actions/upload-artifact@v3
       with:
-        name: PowerCalculatorAMD64
-        path: ./build
+        name: PowerCalculator
+        path: output/amd64/PowerCalculator
   build-arm-release:
     runs-on: ubuntu-latest
     steps:
@@ -36,5 +36,5 @@ jobs:
     - run: dotnet publish --runtime linux-arm64 --configuration Release --self-contained
     - uses: actions/upload-artifact@v3
       with:
-        name: PowerCalculatorARM64
-        path: ./build
+        name: PowerCalculator
+        path: output/arm64/PowerCalculator
