@@ -1,4 +1,4 @@
-f[Unit]
+[Unit]
 Description=powercalculator
 After=syslog.target network.target ntp.service
 
